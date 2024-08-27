@@ -1,0 +1,102 @@
+<div>
+    {% if data %}
+    <table id="tabla_listar" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Paquete</th>
+                <th>Fecha entrega</th>
+                <th>Hora entrega</th>
+                <th>Dirección de entrega</th>
+                <th>Estado</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.nombre_paquete }}</td>
+                <td>{{ item.fecha_entrega }}</td>
+                <td>{{ item.hora_entrega }}</td>
+                <td>{{ item.direccion }}</td>
+                <td>{{ item.nombre_fase  }}</td>
+                <td class="action-links">
+                    <a id="editar_cliente" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#paqueteModal" onclick="editarPaquete('{{ item.idpaquete }}')" ><i class="bi bi-pencil-square"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No se encontraron usuarios tipo {{ option.lower() }}.</p>
+    {% endif %}
+</div>
+
+<!-- Modal para editar paquete -->
+<div class="modal fade" id="paqueteModal" tabindex="-1" role="dialog" aria-labelledby="paqueteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paqueteModalLabel">Editar paquete: {{option}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="paqueteForm">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="idpaquete" name="idpaquete">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_entrega">Fecha Entrega</label>
+                        <input type="date" class="form-control" id="fecha_entrega" name="fecha_entrega">
+                    </div>
+                    <div class="form-group">
+                        <label for="hora_entrega">Hora Entrega</label>
+                        <input type="time" class="form-control" id="hora_entrega" name="hora_entrega">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-personalizado" onclick="submitFormPaquete()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar paquete -->
+<div class="modal fade" id="paqueteAddModal" tabindex="-1" role="dialog" aria-labelledby="paqueteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paqueteModalLabel">Editar paquete: {{option}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="paqueteAddForm">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="idpaquete" name="idpaquete">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_entrega">Fecha Entrega</label>
+                        <input type="date" class="form-control" id="fecha_entrega" name="fecha_entrega">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_entrega">Fecha Entrega</label>
+                        <input type="date" class="form-control" id="fecha_entrega" name="fecha_entrega">
+                    </div>
+                    <div class="form-group">
+                        <label for="hora_entrega">Hora Entrega</label>
+                        <input type="time" class="form-control" id="hora_entrega" name="hora_entrega">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-personalizado" onclick="submitFormPaquete()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

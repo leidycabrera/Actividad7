@@ -1,0 +1,95 @@
+<div>
+    {% if data %}
+    <button type="button" id="add_person" class="btn btn-personalizado btn-custom" data-toggle="modal"
+        data-target="#personModal" onclick="loadForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
+            viewBox="0 0 16 16">
+            <path
+                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+        </svg>
+    </button>
+    <table id="tabla_listar" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Documento de identidad</th>
+                <th>Telefono</th>
+                <th>Direccion</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.nombre_persona + ' ' + item.apellido}}</td>
+                <td>{{ item.docidentidad }}</td>
+                <td>{{ item.telefono }}</td>
+                <td>{{ item.direccion }}</td>
+                <td>{{ item.correo }}</td>
+                <td>{{ item.nombre_tipo }}</td>
+                <td class="action-links">
+                    <a id="editar_cliente" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#personModal" onclick="editarPersona('{{ item.idpersona }}')" ><i class="bi bi-pencil-square"></i></a>
+                    <a class="btn btn-danger btn-sm" onclick="eliminarPersona('{{ item.idpersona }}')"><i class="bi bi-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No se encontraron usuarios tipo {{ option.lower() }}.</p>
+    {% endif %}
+</div>
+
+<!-- Modal para agregar/editar persona -->
+<div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="personModalLabel">Agregar {{option}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="personForm">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="idpersona" name="idpersona">
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre_persona">Nombre</label>
+                        <input type="text" class="form-control" id="nombre_persona" name="nombre_persona">
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" name="apellido">
+                    </div>
+                    <div class="form-group">
+                        <label for="docidentidad">Documento de Identidad</label>
+                        <input type="number" class="form-control" id="docidentidad" name="docidentidad">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="number" class="form-control" id="telefono" name="telefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="correo" name="correo">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" value="{{ idtipo_persona }}" id="idtipo_persona" name="idtipo_persona">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-personalizado" onclick="submitForm()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

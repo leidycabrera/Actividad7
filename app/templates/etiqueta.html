@@ -1,0 +1,38 @@
+<div class="label-container">
+    <h4><img id="imagen_etiqueta" src="https://i.pinimg.com/736x/ba/4d/4a/ba4d4a0adddf6146f98910b3b542b94a.jpg"></h4>
+    <table class="table table-striped">
+        <thead>
+            <th>Tipo</th>
+            <th>Datos del destinatario</th>
+            <th>Datos del remitente</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Nombre</td>
+                <td>{{ persona.nombre_persona +' ' +persona.apellido }}</td>
+                <td>Comercializadora Gremlins</td>
+            </tr>
+            <tr>
+                <td>Documento/NIT</td>
+                <td>{{ persona.docidentidad }}</td>
+                <td>9990999999</td>
+            </tr>
+            <tr>
+                <td>Teléfono</td>
+                <td>{{ persona.telefono }}</td>
+                <td>+57 3208287672</td>
+            </tr>
+            <tr>
+                <td>Dirección</td>
+                <td>{{ persona.direccion }}</td>
+                <td>Cra 20 # 5 sur 10 Bogotá</td>
+            </tr>
+            <tr>
+                <td>Correo</td>
+                <td>{{ persona.correo }}</td>
+                <td>comercializadora.gremlins@gmail.com</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<button class="btn btn-personalizado print-button" onclick="window.print()">Imprimir</button>

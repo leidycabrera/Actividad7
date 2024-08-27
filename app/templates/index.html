@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio</title>
+  <!-- Incluye Bootstrap CSS desde el CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Incluye CSS personalizado -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar fixed-top bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">{{ rol.nombre_tipo }} </a>
+      <form class="d-flex" role="logout">
+        <a class="btn btn-outline-light btn-circulo" type="submit" href="{{ url_for('logout') }}"><i
+            class="bi bi-box-arrow-right"></i></a>
+      </form>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div id="container">
+    <!-- Hero Section -->
+    <header class="hero-section">
+      {{ vista|safe }}
+
+    </header>
+    <div id="inicio">
+      <!-- Main Content -->
+      <main>
+        <div class="container mt-5">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-12">
+                <div class="card-body">
+                  <div id="loadContent"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+  </div>
+
+  <!-- Incluye Bootstrap JS y dependencias desde el CDN -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#filtrar_clientes').click(function () {
+        var selectedOption = $('#filtro_admin').val();
+        $.ajax({
+          url: "{{ url_for('filtrar_clientes') }}",
+          type: "POST",
+          data: { option: selectedOption },
+          success: function (response) {
+            $('#loadContent').html(response);
+          },
+          error: function (error) {
+            console.log("Error:", error);
+          }
+        });
+      });
+    });
+
+    function loadForm() {
+      // Puedes agregar lógica para cargar datos en el formulario si es necesario
+      document.getElementById("personForm").reset();
+    }
+
+    function submitForm() {
+      const formData = $("#personForm").serialize();
+      $.ajax({
+        type: "POST",
+        url: "{{ url_for('guardar_persona') }}",
+        data: formData,
+        success: function (response) {
+          alert(response.message);
+          location.reload();
+        },
+        error: function (error) {
+          alert(response.message);
+        }
+      });
+    }
+
+    function editarPersona(id) {
+      $.ajax({
+        url: '/obtener_persona/' + id,
+        method: 'GET',
+        success: function (data) {
+          $('#idpersona').val(data.idpersona);
+          $('#nombre_persona').val(data.nombre_persona);
+          $('#apellido').val(data.apellido);
+          $('#docidentidad').val(data.docidentidad);
+          $('#telefono').val(data.telefono);
+          $('#direccion').val(data.direccion);
+          $('#correo').val(data.correo);
+          $('#idtipo_persona').val(data.idtipo_persona);
+          $('#personModalLabel').text('Editar ' + data.nombre_tipo + ': ' + data.nombre_persona + ' ' + data.apellido);
+        },
+        error: function (xhr, status, error) {
+          console.error('Error al obtener los datos de la persona:', error);
+        }
+      });
+    }
+
+    function eliminarPersona(id) {
+      if (confirm('¿Está seguro de eliminar?')) {
+        $.ajax({
+          url: '/eliminar/' + id,
+          method: 'GET',
+          success: function (response) {
+            alert(response.message);
+            location.reload();
+          },
+          error: function (xhr, status, error) {
+            console.error('Error al eliminar el registro:', error);
+          }
+        });
+      }
+    }
+
+    $('#generar_etiqueta').click(function () {
+      var selectedOption = $('#select_generar').val();
+      $.ajax({
+        url: "{{ url_for('generar_etiqueta') }}",
+        type: "POST",
+        data: { option: selectedOption },
+        success: function (response) {
+          $('#loadContent').html(response);
+        },
+        error: function (error) {
+          console.log("Error:", error);
+        }
+      });
+    });
+
+    $('#filtrar_paquete').click(function () {
+      var selectedOption = $('#select_paquetes').val();
+      $.ajax({
+        url: "{{ url_for('filtrar_paquete') }}",
+        type: "POST",
+        data: { option: selectedOption },
+        success: function (response) {
+          $('#loadContent').html(response);
+        },
+        error: function (error) {
+          console.log("Error:", error);
+        }
+      });
+    });
+
+    function editarPaquete(id) {
+      $.ajax({
+        url: '/obtener_paquete/' + id,
+        method: 'GET',
+        success: function (data) {
+          $('#idpaquete').val(data.idpaquete);
+          $('#fecha_entrega').val(data.fecha_entrega);
+          $('#hora_entrega').val(data.hora_entrega);
+          $('#paqueteModalLabel').text('Editar el paquete: ' + data.nombre_paquete);
+        },
+        error: function (xhr, status, error) {
+          console.error('Error al obtener los datos de la persona:', error);
+        }
+      });
+    }
+
+    function submitFormPaquete() {
+      if (confirm('¿Está seguro de editar fecha u horario de envío?')) {
+        const formData = $("#paqueteForm").serialize();
+        $.ajax({
+          type: "POST",
+          url: "{{ url_for('editar_paquete') }}",
+          data: formData,
+          success: function (response) {
+            alert(response.message);
+            location.reload();
+          },
+          error: function (error) {
+            alert(response.message);
+          }
+        });
+      }
+    }
+
+    $('#filtrar_datos_traspo').click(function () {
+      var selectedOption = $('#filtro_trans').val();
+      $.ajax({
+        url: "{{ url_for('filtrar_datos_transportador') }}",
+        type: "POST",
+        data: { option: selectedOption },
+        success: function (response) {
+          $('#loadContent').html(response);
+        },
+        error: function (error) {
+          console.log("Error:", error);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
